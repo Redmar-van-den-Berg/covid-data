@@ -26,8 +26,8 @@
     <input type="time" token="time">
       <label>Time</label>
       <default>
-        <earliest>0</earliest>
-        <latest></latest>
+        <earliest>-1mon@mon</earliest>
+        <latest>@mon</latest>
       </default>
     </input>
     <input type="dropdown" token="city">
@@ -60,9 +60,7 @@
       <title>COVID-19 overview for $city$ in $province$</title>
       <chart>
         <search base="filter_search">
-          <query>
-            search | timechart span=1w sum(Total_reported) as Reported sum(Hospital_admission) as Hospitalised sum(Deceased) as Deceased
-          </query>
+          <query>search | timechart span=1w sum(Total_reported) as Reported sum(Hospital_admission) as Hospitalised sum(Deceased) as Deceased</query>
         </search>
         <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
         <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
