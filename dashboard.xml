@@ -72,7 +72,7 @@
       <chart>
         <search base="filter_search">
           <query>
-            search | timechart sum(Total_reported) as Reported sum(Hospital_admission) as Hospitalised sum(Deceased) as Deceased
+            search | timechart span=1w sum(Total_reported) as Reported sum(Hospital_admission) as Hospitalised sum(Deceased) as Deceased
           </query>
         </search>
         <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
