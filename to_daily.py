@@ -67,6 +67,12 @@ def main(args):
             data = parse_line(line, header)
             keys, values = to_tuple(data)
 
+            # The data file also contains cumulative data for each province, we
+            # exclude those since they have no municipality.
+            # This way, all rows have all data.
+            if not data['Municipality_code']:
+                continue
+
             # If this is the first time we see these keys
             if keys not in previous:
                 print(*(data[x] for x in header), sep=';')
