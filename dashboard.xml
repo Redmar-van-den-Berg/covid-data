@@ -9,7 +9,7 @@
   </search>
   <search id="filter_search" base="base_search">
     <query>
-      | search Municipality_name=$city$
+      | search Municipality_name="$city$"
     </query>
   </search>
   <fieldset submitButton="false" autoRun="true">
@@ -56,6 +56,7 @@
   </row>
   <row>
     <panel>
+      <title>COVID-19 overview for $city$</title>
       <chart>
         <search base="filter_search">
           <query>
