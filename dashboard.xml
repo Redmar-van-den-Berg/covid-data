@@ -7,6 +7,11 @@
     <earliest>$time.earliest$</earliest>
     <latest>$time.latest$</latest>
   </search>
+  <search id="filter_search" base="base_search">
+    <query>
+      | search Municipality_name=$city$
+    </query>
+  </search>
   <fieldset submitButton="false" autoRun="true">
     <input type="dropdown" token="source" searchWhenChanged="true">
       <label>Source</label>
@@ -19,19 +24,31 @@
       <default>/tank/data/covid/gemeente/daily/2020-06-05_gemeente_daily.csv</default>
     </input>
     <input type="time" token="time">
-      <label></label>
+      <label>Time</label>
       <default>
-        <earliest>-7d@h</earliest>
-        <latest>now</latest>
+        <earliest>0</earliest>
+        <latest></latest>
       </default>
+    </input>
+    <input type="dropdown" token="city">
+      <label>City</label>
+      <choice value="*">All</choice>
+      <default>*</default>
+      <fieldForLabel>Municipality_name</fieldForLabel>
+      <fieldForValue>Municipality_name</fieldForValue>
+      <search base="base_search">
+        <query>
+          | stats count by Municipality_name
+        </query>
+      </search>
     </input>
   </fieldset>
   <row>
     <panel>
       <table>
-        <title>Zoetermeer</title>
-        <search base="base_search">
-          <query> |  search Municipality_name="Zoetermeer" |  table _time, Municipality_name as Stad, Total_reported, Hospital_admission, Deceased </query>
+        <title>Last results</title>
+        <search base="filter_search">
+          <query> |  table _time, Municipality_name as City, Total_reported, Hospital_admission, Deceased </query>
         </search>
         <option name="drilldown">none</option>
       </table>
@@ -40,7 +57,7 @@
   <row>
     <panel>
       <chart>
-        <search base="base_search">
+        <search base="filter_search">
           <query>
             search | timechart sum(Total_reported) as Reported sum(Hospital_admission) as Hospitalised sum(Deceased) as Deceased
           </query>
@@ -53,18 +70,18 @@
         <option name="charting.axisX.abbreviation">none</option>
         <option name="charting.axisX.scale">linear</option>
         <option name="charting.axisY.abbreviation">none</option>
-        <option name="charting.axisY.scale">log</option>
+        <option name="charting.axisY.scale">linear</option>
         <option name="charting.axisY2.abbreviation">none</option>
         <option name="charting.axisY2.enabled">0</option>
         <option name="charting.axisY2.scale">inherit</option>
-        <option name="charting.chart">line</option>
+        <option name="charting.chart">column</option>
         <option name="charting.chart.bubbleMaximumSize">50</option>
         <option name="charting.chart.bubbleMinimumSize">10</option>
         <option name="charting.chart.bubbleSizeBy">area</option>
         <option name="charting.chart.nullValueMode">gaps</option>
         <option name="charting.chart.showDataLabels">none</option>
         <option name="charting.chart.sliceCollapsingThreshold">0.01</option>
-        <option name="charting.chart.stackMode">default</option>
+        <option name="charting.chart.stackMode">stacked</option>
         <option name="charting.chart.style">shiny</option>
         <option name="charting.drilldown">none</option>
         <option name="charting.layout.splitSeries">0</option>
@@ -84,7 +101,7 @@
     <panel>
       <title>Overview piechart</title>
       <chart>
-        <search base="base_search">
+        <search base="filter_search">
           <query>
             | stats sum(Total_reported) as Reported sum(Hospital_admission) as Hospitalised sum(Deceased) as Deceased by Municipality_name | transpose
           </query>
