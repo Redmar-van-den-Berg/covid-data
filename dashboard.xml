@@ -9,7 +9,7 @@
   </search>
   <search id="filter_search" base="base_search">
     <query>
-      | search Municipality_name="$city$"
+      | search Municipality_name="$city$" Province="$province$"
     </query>
   </search>
   <fieldset submitButton="false" autoRun="true">
@@ -42,6 +42,18 @@
         </query>
       </search>
     </input>
+    <input type="dropdown" token="province">
+      <label>Province</label>
+      <choice value="*">All</choice>
+      <default>*</default>
+      <fieldForLabel>Province</fieldForLabel>
+      <fieldForValue>Province</fieldForValue>
+      <search base="base_search">
+        <query>
+          | stats count by Province
+        </query>
+      </search>
+    </input>
   </fieldset>
   <row>
     <panel>
@@ -56,7 +68,7 @@
   </row>
   <row>
     <panel>
-      <title>COVID-19 overview for $city$</title>
+      <title>COVID-19 overview for $city$ in $province$</title>
       <chart>
         <search base="filter_search">
           <query>
